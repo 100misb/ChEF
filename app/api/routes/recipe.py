@@ -8,18 +8,16 @@ from app.services import clean_attributes
 from gensim.test.utils import get_tmpfile
 from gensim.models import FastText
 from app.core.config import Settings
-from app.services.predict import list_Similar_dishes, list_similar_dishes_by_name
-from app.services.recipe import get_recipe_detail_by_id, get_recipe_detail_by_name
+from app.services.predict import list_Similar_dishes
+from app.services.recipe import get_recipe_detail_by_id
 
 
 import pandas as pd
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 
-FASTTEXT_MODEL_PATH = "/home/somi/ampba/fp1/chef/nlp/models/model_indianfood_fasttext.model"
 settings = Settings()
+FASTTEXT_MODEL_PATH = settings.FAST_TEXT_EMBEDDINGS
+
 
 router = APIRouter()
 
@@ -118,45 +116,3 @@ async def get_recipe_details(
         "basic_recipe": recipe_details,
         "recommednded_recipies" : recommednded_recipies
     }
-
-
-
-# @router.get(
-#     "/name",
-# )
-# async def get_recipe_details_by_name(
-#     recipe_name: str,
-#     cuisine: List[str] = Query(None),
-#     diet: List[str] = Query(None),
-#     with_recommendations: bool = True,
-# ):
-
-#     # base recipe informations should be independent from its recommendations
-#     recipe_details = get_recipe_detail_by_name(
-#         recipe_name,
-#         ["TranslatedRecipeName","TranslatedIngredients", "Cuisine", "Course", "Diet", "URL","recipe_embedding_fasttext"]
-#     )
-
-#     recommednded_recipies = {}
-
-#     # provide recommendations where it is required at the product page
-#     if with_recommendations:
-#         recommednded_recipies = await list_similar_dishes_by_name(
-#             recipe_name,
-#             cuisine=cuisine,
-#             diet=diet,
-#             embeddings=recipe_details["recipe_embedding_fasttext"]
-#         )
-
-#     del recipe_details["recipe_embedding_fasttext"]
-#     print(
-#         {
-#             "basic_recipe": recipe_details,
-#             "recommednded_recipies" : recommednded_recipies
-#         }
-#     )
-
-#     return {
-#         "basic_recipe": recipe_details,
-#         "recommednded_recipies" : recommednded_recipies
-#     }

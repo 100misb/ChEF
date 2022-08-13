@@ -4,14 +4,16 @@ import pandas as pd
 from typing import List
 
 from app.core.errors import PredictException, ModelLoadException
-from app.core.config import MODEL_NAME, MODEL_PATH
+from app.core.config import MODEL_NAME, MODEL_PATH, Settings
 from loguru import logger
 
 from numpy import dot
 from numpy.linalg import norm
 import numpy as np
 
-SOURCE_CLEANED_DATASET = "/home/somi/ampba/fp1/chef/data/external/df_indianRecipes.pkl"
+# SOURCE_CLEANED_DATASET = "/home/somi/ampba/fp1/chef/data/external/df_indianRecipes.pkl"
+settings = Settings()
+
 
 class MachineLearningModelHandlerScore(object):
     model = None
@@ -83,7 +85,7 @@ def find_Similar_dish(xx, cleaned_data: pd.DataFrame, embeddings ,embeddingToUse
     return mostSimilarDishes
 
 
-async def list_Similar_dishes(xx, cuisine, diet, embeddings ,cleaned_data_path: str = SOURCE_CLEANED_DATASET, embeddingToUse = "recipe_embedding_fasttext"):
+async def list_Similar_dishes(xx, cuisine, diet, embeddings ,cleaned_data_path: str = settings.DATA_FILE_PATH, embeddingToUse = "recipe_embedding_fasttext"):
 
     additionalColumns = ['TranslatedRecipeName', 'Cuisine', 'Course', 'Diet', 'clean_ingredients']
     
@@ -106,7 +108,7 @@ async def list_Similar_dishes(xx, cuisine, diet, embeddings ,cleaned_data_path: 
     return similar_dishes
 
 
-async def list_similar_dishes_by_name(name, cuisine, diet, embeddings ,cleaned_data_path: str = SOURCE_CLEANED_DATASET, embeddingToUse = "recipe_embedding_fasttext"):
+async def list_similar_dishes_by_name(name, cuisine, diet, embeddings ,cleaned_data_path: str = settings.DATA_FILE_PATH, embeddingToUse = "recipe_embedding_fasttext"):
 
     # columns to show
     additionalColumns = ['TranslatedRecipeName', 'Cuisine', 'Course', 'Diet', 'clean_ingredients']

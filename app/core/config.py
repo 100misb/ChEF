@@ -10,6 +10,7 @@ from pydantic import BaseSettings
 from pathlib import Path
 
 config_file_path = Path(__file__).resolve()
+root_dir = config_file_path.parents[2]
 app_dir = config_file_path.parents[1]
 
 
@@ -36,6 +37,13 @@ MODEL_NAME = config("MODEL_NAME", default="model.pkl")
 
 
 class Settings(BaseSettings):
-    DATA_FILE_PATH: str = "/home/somi/ampba/fp1/chef/data/external/df_indianRecipes.pkl"
-    FAST_TEXT_EMBEDDINGS: str = "/home/somi/ampba/fp1/chef/nlp/models/model_indianfood_fasttext.model"
+
+    # DATA_FILE_PATH: str = "/home/somi/ampba/fp1/chef/data/external/df_indianRecipes.pkl"
+    # FAST_TEXT_EMBEDDINGS: str = "/home/somi/ampba/fp1/chef/nlp/models/model_indianfood_fasttext.model"
+
+    DATA_FILE_PATH: str = str(app_dir / "data" / "df_indianRecipes.pkl")
+    FAST_TEXT_EMBEDDINGS: str = str(root_dir/ "app" / "ml" / "model" / "model_indianfood_fasttext.model")
+    DEFAULT_RECIPE_IMAGE: str = str(app_dir / "data" / "blank_image.jpg")
     FEEDBACK_FILE : Path = app_dir / "data" / "feedback.json"
+    # LOCALHOST_SEED_URL: str = "http://localhost:"
+    # PORT: str = "8000"
