@@ -1,67 +1,84 @@
-# chef
+## ChEF (Choices for Everyday Food)
 
 A short description of the project
 
 ## Development Requirements
 
 - Python3.8.2
-- Pip
 - Poetry (Python Package Manager)
-
-### M.L Model Environment
-
-```sh
-MODEL_PATH=./ml/model/
-MODEL_NAME=model.pkl
-```
-
-### Update `/predict`
-
-To update your machine learning model, add your `load` and `method` [change here](app/api/routes/predictor.py#L13) at `predictor.py`
 
 ## Installation
 
-```sh
-python -m venv venv
-source venv/bin/activate
-make install
-```
+There are 2 main services which ChEF depends on : 
 
-## Runnning Localhost
+1. Fast API service
+2. Streamlit UI
 
-`make run`
 
-## Deploy app
+- Running Services Locally
 
-`make deploy`
+  - Go to the following directory in your terminal
+    ```zsh
+    cd chef
+    ```
 
-## Running Tests
+  - Get all the python dependencies
+    ```zsh
+    poetry install
+    ```
 
-`make test`
+  - To activate virtual environment :
+    ```
+    source .venv/bin/activate
+    ```
 
-## Runnning Easter Egg
+  - To start FastAPI service
+    ```
+    uvicorn app.main:app --reload
+    ```
+    The swagger documentation for FastAPI will be available at `http://localhost:8000/docs`
 
-`make easter`
+  - To start the STreamlit UI : 
+    - Check if these values inside `app/ui/helper.py` are the following:
+    ```
+    LOCALHOST_SEED_URL =  "http://localhost:"
+    PORT = "8000"
+    ```
 
-## Access Swagger Documentation
+    - once the values are modified run the following code
+    ```
+    streamlit run app/ui/main.py
+    ```
+    - Streamlit ui will be available at `http://localhost:8501`
 
-> <http://localhost:8080/docs>
+- To run the whole application with Docker 
+  - Create a `.env` file and fill the values as same as `.env.example`
+  - From the root folder run the following command : 
+    
+    - Runninig the first time
+    
+        ```
+        docker-compose up --build
+        ```
 
-## Access Redocs Documentation
+    - Running an existing images :
+        ```
+        docker-compose up
+        ```
 
-> <http://localhost:8080/redoc>
+    - To stop the application :
+        ```
+        docker-compose down
+        ```
 
-## Project structure
+    - Services will be available at :
+      - FastAPI swagger : `http://localhost:8000/docs`
+      - Streamlit UI: `http://localhost:8504`
 
-Files related to application are in the `app` or `tests` directories.
-Application parts are:
 
-    app
-    ├── api              - web related stuff.
-    │   └── routes       - web routes.
-    ├── core             - application configuration, startup events, logging.
-    ├── models           - pydantic models for this application.
-    ├── services         - logic that is not just crud related.
-    └── main.py          - FastAPI application creation and configuration.
-    │
-    tests                  - pytest
+### Basic project details
+
+1. Data Preparation and model training notebook : `chef/app/src/data_preparation.ipynb`
+
+2. Fast api application endpoints  `chef/app/routes`
+3. Streamlit UI scripts : `chef/app/ui`
